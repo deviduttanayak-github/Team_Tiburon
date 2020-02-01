@@ -4,6 +4,6 @@
 ImageThreshingTool::ImageThreshingTool(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::ImageThreshingTool) {
   ui->setupUi(this);
-}
+  }
 
 ImageThreshingTool::~ImageThreshingTool() { delete ui; }
