@@ -42,3 +42,6 @@ target_link_libraries(image_threshing_tool_lib ${QT_LIBRARIES} ${catkin_LIBRARIE
 
 add_executable(image_threshing_tool src/main.cpp)
 target_link_libraries(image_threshing_tool image_threshing_tool_lib)
+
+add_executable(image_threshing_tool1 src/image_thresholdin2_ui/main.cpp)
+target_link_libraries(image_threshing_tool1 image_threshing_tool_lib)
