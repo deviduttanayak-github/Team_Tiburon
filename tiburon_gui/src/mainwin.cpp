@@ -4,17 +4,9 @@
 
 mainwin::mainwin(ros::NodeHandle _nh, QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwin), nh(_nh){
   LOGO_PATH = "/home/devidutta/Pictures/tiburon.jpeg";
-  //VIDEO_PATH = "/home/devidutta/Downloads/tasks/videos/Gate_YFlare_Buckets.avi";
-VIDEO_PATH = "/home/devidutta/Downloads/tasks/videos/buckets.avi";
-  //ROS_PATH =  "cam1";
-	
+  VIDEO_PATH = "/home/devidutta/Downloads/tasks/videos/Gate_YFlare_Buckets.avi";
+
   ui->setupUi(this);
-	//it=new image_transport::ImageTransport(nh);
-       // dis = it->subscribe("cam1", 1, recv);
-
-
-	//ui->video_text->setText(QString::fromStdString(VIDEO_PATH));
-	//ui->destination_text->setText(QString::fromStdString(DESTINATION_PATH));
 	timer = new QTimer(this);
      	connect(timer, SIGNAL(timeout()),this,SLOT(loop()));
     	timer->start(10);
