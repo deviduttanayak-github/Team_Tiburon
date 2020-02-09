@@ -2,7 +2,6 @@
 #define YELLOWFLARE_H
 
 #include "ui_yellowflare.h"
-//#include "tiburon_gui/mainwin.h"
 #include <QMainWindow>
 #include <QPixmap>
 #include <QTimer>
@@ -26,7 +25,6 @@ public:
   ~yellowflare();
   Ui::yellowflare *ui;
   void feed(cv::Mat);
-  
 public slots:
 	void save();
 	void channel(int);

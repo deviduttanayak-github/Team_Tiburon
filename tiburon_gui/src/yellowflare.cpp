@@ -126,7 +126,7 @@ std::cout<<"Parameters saved\n";
 }
 
 void yellowflare::pause(){
-
+//mainwinui->pau();
 }
 
 void yellowflare::close(){

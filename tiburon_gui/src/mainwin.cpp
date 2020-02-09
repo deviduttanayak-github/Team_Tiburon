@@ -49,6 +49,8 @@ void mainwin::loop()
 				bluebucketui->feed(src);
                         if(redbucketui>0)
 				redbucketui->feed(src);
+			if(redflareui>0)
+				redflareui->feed(src);
 
 
 		}
