@@ -1,5 +1,7 @@
 #include "tiburon_gui/yellowflare.h"
 #include "ui_yellowflare.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace cv;
@@ -25,7 +27,8 @@ yellowflare::yellowflare(QWidget *parent) : QMainWindow(parent), ui(new Ui::yell
   connect(ui->HL_th,SIGNAL(valueChanged(int)),this,SLOT(Threshold(int)));
   connect(ui->width,SIGNAL(valueChanged(int)),this,SLOT(wid(int)));
   connect(ui->height,SIGNAL(valueChanged(int)),this,SLOT(hei(int))); 
-
+  connect(ui->pause,SIGNAL(pressed()),this,SLOT(pause()));
+  connect(ui->close,SIGNAL(pressed()),this,SLOT(close()));
  
 
 }
@@ -47,14 +50,13 @@ void yellowflare::Threshold(int val){threshold=val;}
 void yellowflare::wid(int val){width=val;}
 void yellowflare::hei(int val){height=val;}
 
-void yellowflare::feed(cv::Mat img)
+void yellowflare::feed(cv::Mat img2)
 {
-	
-
-	cv::Mat dx,maskl,maskl2,maskr,maskr2,mask,fin_img, grad;
+	cv::Mat img,dx,maskl,maskl2,maskr,maskr2,mask,fin_img, grad,last_img;
+	img=img2.clone();
 	cv::Scalar maxHSV,minHSV;
-	channel_show(img);
-        cv::GaussianBlur( img, mask, cv::Size( 9, 9 ), 0, 0 );
+	channel_show(img2);
+	cv::GaussianBlur( img, mask, cv::Size( 9, 9 ), 0, 0 );
         cv::cvtColor(mask, mask, cv::COLOR_BGR2HSV);
 
         minHSV = cv::Scalar(HSV[0],HSV[1],HSV[2]);
@@ -84,7 +86,7 @@ void yellowflare::feed(cv::Mat img)
 	}
 	for(size_t i=0;i<contours.size();i++){
 		if(boundRect[i].width>width && boundRect[i].height>height)
-		rectangle(img,boundRect[i].tl(), boundRect[i].br(),Scalar(255,0,0));
+		rectangle(img,boundRect[i].tl(), boundRect[i].br(),Scalar(255,0,0),2);
 	}
 
 	if(out_ch==3)fin_img=img;
@@ -95,7 +97,32 @@ void yellowflare::feed(cv::Mat img)
 
 void yellowflare::save()
 {
-	std::cout<<"s\n";
+std::cout<<"Parameters saved\n";
+        ifstream f("/home/devidutta/catkin_ws/src/tiburon_gui/config/yellowflareconfig.txt");
+        if(f.eof())
+	{
+		std::cout<<"Config File missing\n";
+                ofstream ofs("/home/devidutta/catkin_ws/src/tiburon_gui/config/yellowflareconfig.txt");
+                ofs.close();
+	}
+        else
+	{
+		ofstream f("/home/devidutta/catkin_ws/src/tiburon_gui/config/yellowflareconfig.txt",ios::ate);
+		f << "HSV THRESHOLDING PARAMETERS:\nLow_H = " << HSV[0];
+		f << "\nLow_S = " << HSV[1];
+		f << "\nLow_V = " << HSV[2];
+		f << "\nHigh_H = " << HSV[3];
+		f << "\nHigh_S = " << HSV[4];
+		f << "\nHigh_V = " << HSV[5];
+		f << "\nSOBEL PARAMETERS:\nKernel_size = " << S_sob;
+		f << "\nMORPH PARAMETERS:\nKernel_size = " << S_op;
+		f << "\nCANNY THRESHOLD PARAMETERS:\nThreshold = " << threshold;
+		f << "\nRatio = " << 2;
+		f << "\nKernel_size = " << 3;
+		f << "\nCONTOUR RECTANGLE PARAMETERS:\nHeight = " << height;
+		f << "\nWidth = " << width;
+		f.close(); 
+	}
 }
 
 void yellowflare::pause(){
@@ -103,8 +130,9 @@ void yellowflare::pause(){
 }
 
 void yellowflare::close(){
-
+this->close();
 }
+
 
 void yellowflare::channel_show(cv::Mat img)
 {

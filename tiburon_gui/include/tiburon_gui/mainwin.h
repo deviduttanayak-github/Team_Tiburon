@@ -40,6 +40,7 @@ public slots:
 	void RedFlare();
 	void YellowFlare();
         void loop();
+void pau();
 
 private:
   	Ui::mainwin *ui;
@@ -51,12 +52,15 @@ private:
 	QTimer *timer;
 	cv::VideoCapture cap;
 	ros::NodeHandle nh;
-image_transport::ImageTransport *it;
-  image_transport::Publisher dis;
+        image_transport::ImageTransport *it;
+        image_transport::Publisher dis;
   	std::string LOGO_PATH, load_image_path, VIDEO_PATH, ROS_PATH, str,
       	frame_name;
   	int count_proc, count_save,save_index;
   	cv::Mat frame_current, frame_save;
+cv::Mat src;
+int f=0;
+
 };
 
 #endif // FRAMER_H

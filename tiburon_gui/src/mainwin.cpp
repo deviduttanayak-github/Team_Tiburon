@@ -9,7 +9,7 @@ mainwin::mainwin(ros::NodeHandle _nh, QWidget *parent) : QMainWindow(parent), ui
   ui->setupUi(this);
 	timer = new QTimer(this);
      	connect(timer, SIGNAL(timeout()),this,SLOT(loop()));
-    	timer->start(10);
+    	timer->start(1);
 	cap.open(VIDEO_PATH);
   	frame_save=cv::imread(LOGO_PATH);
   	cv::cvtColor(frame_save, frame_save, CV_BGR2RGB);
@@ -22,7 +22,7 @@ mainwin::mainwin(ros::NodeHandle _nh, QWidget *parent) : QMainWindow(parent), ui
 connect(ui->blueBucket, SIGNAL(pressed()), this, SLOT(BlueBucket()));
 connect(ui->redFlare, SIGNAL(pressed()), this, SLOT(RedFlare()));
 connect(ui->yellowFlare, SIGNAL(pressed()), this, SLOT(YellowFlare()));
-
+connect(ui->pause, SIGNAL(pressed()), this, SLOT(pau()));
  
 
 }
@@ -30,11 +30,13 @@ connect(ui->yellowFlare, SIGNAL(pressed()), this, SLOT(YellowFlare()));
 mainwin::~mainwin() { delete ui; }
 void mainwin::loop()
 {
+  //cv::Mat src;
   if( cap.isOpened())
-	{
-		cv::Mat src;
-		 cap >> src;
+	{		 
+		if(f!=1)		
+		cap >> src;   
     		 if(!src.empty()) {
+			if(f!=1)
  		 	cv::cvtColor(src, src, CV_BGR2RGB);
 			ui->vid->setPixmap(QPixmap::fromImage(
 			QImage(src.data, src.cols, src.rows,
@@ -43,12 +45,21 @@ void mainwin::loop()
 				gateui->feed(src);
 			if(yellowflareui>0)
 				yellowflareui->feed(src);
+                        if(bluebucketui>0)
+				bluebucketui->feed(src);
+                        if(redbucketui>0)
+				redbucketui->feed(src);
+
 
 		}
 
 	}
 }
 
+void mainwin::pau(){
+if(f==0) f=1;
+else f=0;
+}
 
 void mainwin::Gate()
 {

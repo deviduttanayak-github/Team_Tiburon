@@ -2,10 +2,11 @@
 #define YELLOWFLARE_H
 
 #include "ui_yellowflare.h"
+//#include "tiburon_gui/mainwin.h"
 #include <QMainWindow>
 #include <QPixmap>
 #include <QTimer>
-
+#include <fstream>
 #include <opencv2/opencv.hpp>
 #include <ros/package.h>
 #include <ros/ros.h>
@@ -57,6 +58,8 @@ private:
 	int threshold=0;
 	int width;
 	int height;
+int f=0;
+//	mainwin *mainwinui=NULL;
   cv::VideoCapture cap;
   std::string LOGO_PATH, CONFIG_PATH;
 };
