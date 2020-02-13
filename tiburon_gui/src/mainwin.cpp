@@ -4,7 +4,10 @@
 
 mainwin::mainwin(ros::NodeHandle _nh, QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwin), nh(_nh){
   LOGO_PATH = "/home/devidutta/Pictures/tiburon.jpeg";
-  VIDEO_PATH = "/home/devidutta/Downloads/tasks/videos/Gate_YFlare_Buckets.avi";
+  //VIDEO_PATH = "/home/devidutta/Downloads/tasks/videos/Gate_YFlare_Buckets.avi";
+
+  TOPIC_NAME="";
+  image_transport::Subscriber sub = it->subscribe(TOPIC_NAME, 1, imageCallback);
 
   ui->setupUi(this);
 	timer = new QTimer(this);
@@ -28,6 +31,11 @@ connect(ui->pause, SIGNAL(pressed()), this, SLOT(pau()));
 }
 
 mainwin::~mainwin() { delete ui; }
+
+void mainwin::imageCallback(const sensor_msgs::ImageConstPtr& msg){
+src=  cv_bridge::toCvShare(msg, "bgr8")->image;
+}
+
 void mainwin::loop()
 {
   //cv::Mat src;
@@ -51,11 +59,34 @@ void mainwin::loop()
 				redbucketui->feed(src);
 			if(redflareui>0)
 				redflareui->feed(src);
-
-
 		}
 
 	}
+  else{
+		if(f!=1)		
+		cap >> src;   
+    		 if(!src.empty()) {
+			if(f!=1)
+ 		 	cv::cvtColor(src, src, CV_BGR2RGB);
+			ui->vid->setPixmap(QPixmap::fromImage(
+			QImage(src.data, src.cols, src.rows,
+				    src.step, QImage::Format_RGB888)));
+			if(gateui>0)
+				gateui->feed(src);
+			if(yellowflareui>0)
+				yellowflareui->feed(src);
+                        if(bluebucketui>0)
+				bluebucketui->feed(src);
+                        if(redbucketui>0)
+				redbucketui->feed(src);
+			if(redflareui>0)
+				redflareui->feed(src);
+		}
+
+
+  }
+
+
 }
 
 void mainwin::pau(){

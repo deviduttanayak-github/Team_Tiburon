@@ -1,6 +1,10 @@
 #include "tiburon_gui/gate.h"
 #include "ui_gate.h"
 #include <iostream>
+#include <fstream>
+
+using namespace std;
+using namespace cv;
 gate::gate(QWidget *parent) : QMainWindow(parent), ui(new Ui::gate) {
   LOGO_PATH = "/home/devidutta/Pictures/tiburon.jpeg";
   //CONFIG_PATH = ros::package::getPath("tiburon_gui")+ "/config/gate_config.dat";
@@ -60,10 +64,12 @@ void gate::Threshold(int val){threshold=val;}
 void gate::minLine(int val){minLineLength=val;}
 void gate::minGap(int val){minLineGap=val;}
 
-void gate::feed(cv::Mat img)
+void gate::feed(cv::Mat img2)
 {
-	
+cv::Mat img;
+img=img2.clone();	
 if(!img.empty()) {
+//cout<<"inside gate\n";
 	cv::Mat dx,maskl,maskl2,maskr,maskr2,mask,fin_img;
 	cv::Scalar maxHSV,minHSV;
 	channel_show(img);
@@ -123,7 +129,41 @@ if(!img.empty()) {
 
 void gate::save()
 {
-	std::cout<<"s\n";
+std::cout<<"Parameters saved\n";
+        ifstream f("/home/devidutta/catkin_ws/src/tiburon_gui/config/gateconfig.txt");
+        if(f.eof())
+	{
+		std::cout<<"Config File missing\n";
+                ofstream of("/home/devidutta/catkin_ws/src/tiburon_gui/config/gateconfig.txt");
+                of.close();
+	}
+        else
+	{
+		ofstream f("/home/devidutta/catkin_ws/src/tiburon_gui/config/gateconfig.txt",ios::ate);
+		f << "HSV THRESHOLDING PARAMETERS:\nRight side\nLow_H = " << HSV[0];
+		f << "\nLow_S = " << HSV[1];
+		f << "\nLow_V = " << HSV[2];
+		f << "\nHigh_H = " << HSV[3];
+		f << "\nHigh_S = " << HSV[4];
+		f << "\nHigh_V = " << HSV[5];
+		f << "\nLeft side:\nlow_H = " << HSV[6];
+		f << "\nHigh_H = " << HSV[7];
+		f << "\nlow_S = " << HSV[8];
+		f << "\nHigh_S = " << HSV[9];
+		f << "\nlow_V = " << HSV[10];
+		f << "\nHigh_V = " << HSV[11];
+
+		f << "\nSOBEL PARAMETERS:\nKernel_size = " << S_sob;
+		f << "\nMORPH PARAMETERS:\nKernel_size = " << S_op;
+		//f << "\nCANNY THRESHOLD PARAMETERS:\nThreshold = " << threshold;
+		// f << "\nRatio = " << 2;
+		//f << "\nKernel_size = " << 3;
+		//f << "\nCONTOUR RECTANGLE PARAMETERS:\nHeight = " << height;
+		//f << "\nWidth = " << width;
+		f << "\nMin_line gap = " << minLineGap;
+		f << "\nmin_length of line = " << minLineLength;		
+		f.close(); 
+	}
 }
 void gate::channel_show(cv::Mat img)
 {
@@ -133,7 +173,8 @@ void gate::channel_show(cv::Mat img)
 	switch(ch_index)
 	{
 		case 0:
-	 	cv::cvtColor(img, fin_img, CV_BGR2RGB);
+	 	//cv::cvtColor(img, fin_img, CV_BGR2RGB);
+		fin_img=img;
 		break;
 
 		case 1:

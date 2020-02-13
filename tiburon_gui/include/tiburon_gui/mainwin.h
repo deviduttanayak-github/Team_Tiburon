@@ -3,6 +3,8 @@
 
 #include "ui_mainwin.h"
 #include "ui_gate.h"
+#include "ui_redflare.h"
+#include "ui_yellowflare.h"
 #include "tiburon_gui/gate.h"
 #include "tiburon_gui/redbucket.h"
 #include "tiburon_gui/bluebucket.h"
@@ -11,7 +13,6 @@
 #include <QMainWindow>
 #include <QPixmap>
 #include <QTimer>
-
 
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
@@ -41,6 +42,7 @@ public slots:
 	void YellowFlare();
         void loop();
 void pau();
+void imageCallback(const sensor_msgs::ImageConstPtr& msg);
 
 private:
   	Ui::mainwin *ui;
@@ -52,10 +54,10 @@ private:
 	QTimer *timer;
 	cv::VideoCapture cap;
 	ros::NodeHandle nh;
-        image_transport::ImageTransport *it;
+        image_transport::ImageTransport *it=NULL;
         image_transport::Publisher dis;
   	std::string LOGO_PATH, load_image_path, VIDEO_PATH, ROS_PATH, str,
-      	frame_name;
+      	frame_name,TOPIC_NAME;
   	int count_proc, count_save,save_index;
   	cv::Mat frame_current, frame_save;
 cv::Mat src;

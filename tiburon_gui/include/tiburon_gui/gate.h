@@ -5,13 +5,13 @@
 #include <QMainWindow>
 #include <QPixmap>
 #include <QTimer>
-
 #include <opencv2/opencv.hpp>
 #include <ros/package.h>
 #include <ros/ros.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Int8.h>
 #include <string>
+#include <fstream>
 
 namespace Ui {
 class gate;

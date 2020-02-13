@@ -52,6 +52,8 @@ void yellowflare::hei(int val){height=val;}
 
 void yellowflare::feed(cv::Mat img2)
 {
+if(!img2.empty()) {
+//cout<<"inside yellow flare\n";
 	cv::Mat img,dx,maskl,maskl2,maskr,maskr2,mask,fin_img, grad,last_img;
 	img=img2.clone();
 	cv::Scalar maxHSV,minHSV;
@@ -91,10 +93,10 @@ void yellowflare::feed(cv::Mat img2)
 
 	if(out_ch==3)fin_img=img;
     ui->out->setPixmap(QPixmap::fromImage(QImage(fin_img.data, fin_img.cols, fin_img.rows,fin_img.step, QImage::Format_RGB888)));
+  
+  }  	
 
-    }	
-
-
+}
 void yellowflare::save()
 {
 std::cout<<"Parameters saved\n";

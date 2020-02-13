@@ -80,6 +80,9 @@
       <pointsize>9</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(47, 200, 36);</string>
+    </property>
     <property name="text">
      <string>Save</string>
     </property>

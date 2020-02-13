@@ -1,0 +1,21 @@
+HSV THRESHOLDING PARAMETERS:
+Right side
+Low_H = 94
+Low_S = 0
+Low_V = 0
+High_H = 158
+High_S = 255
+High_V = 255
+Left side:
+low_H = 0
+High_H = 0
+low_S = 0
+High_S = 1072037888
+low_V = 0
+High_V = 0
+SOBEL PARAMETERS:
+Kernel_size = 3
+MORPH PARAMETERS:
+Kernel_size = 1
+Min_line gap = 0
+min_length of line = 0
